@@ -23,6 +23,7 @@ public class Graph {
         Edge edge = edges.get(edgeId);
         if(edge == null) {
             edge = new Edge(source, dest);
+            this.edges.put(edgeId, edge);
         } else {
             edge.increaseWeight();
         }
@@ -37,5 +38,13 @@ public class Graph {
             nodes.put(n.getId(), n);
         }
         return n;
+    }
+
+    public Map<String, Edge> getEdges() {
+        return edges;
+    }
+
+    public Map<String, Node> getNodes() {
+        return nodes;
     }
 }
