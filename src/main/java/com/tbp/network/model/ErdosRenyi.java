@@ -37,6 +37,7 @@ public class ErdosRenyi {
         for(int i = 0; i < numNodes; i++) {
             g.addNode(i+"");
         }
+        g.display();
         int count = 0;
         while(count < numEdges) {
             Integer source = random.nextInt(numNodes);
@@ -55,7 +56,7 @@ public class ErdosRenyi {
             }
 
         }
-        g.display();
+
         return g;
     }
 
