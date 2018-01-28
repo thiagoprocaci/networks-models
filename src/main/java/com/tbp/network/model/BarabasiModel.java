@@ -5,22 +5,16 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
-import java.util.Random;
 
-public class BarabasiModel {
+public class BarabasiModel extends NetworkModel {
 
-    Integer numNodes;
 
     public BarabasiModel(Integer numNodes) {
-        if(numNodes == null || numNodes < 10) {
-            throw new IllegalArgumentException("Number of nodes must be >= 10");
-        }
-        this.numNodes = numNodes;
+        super(numNodes);
     }
 
-
-    public Graph generate() {
-        Random random = new Random();
+    @Override
+    Graph generate() {
         Graph g = new SingleGraph("Barabasi–Albert model");
 
         // adicionando o primeiro no
@@ -45,18 +39,11 @@ public class BarabasiModel {
                 i++;
             }
         }
-        g.display();
         return g;
     }
 
 
-    double nextDouble() {
-        double start = 0;
-        double end = 1;
-        double random = new Random().nextDouble();
-        double result = start + (random * (end - start));
-        return result;
-    }
+
 
 
 
