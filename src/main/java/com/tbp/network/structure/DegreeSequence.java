@@ -12,6 +12,13 @@ public class DegreeSequence {
     public static final String LEVEL = "LEVEL";
 
 
+    /**
+     *
+     * @param startNode
+     * @param graph
+     * @return map where the key is the distance from the startNode and
+     * the value is the degree list of the nodes with distance key from startNode.
+     */
     public Map<Integer, List<Integer>> execute(String startNode, Graph graph) {
 
         Map<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
