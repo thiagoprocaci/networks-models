@@ -83,6 +83,4 @@ public class DegreeSequenceTest {
         Map<Integer, List<Integer>> degreeSeq = degreeSequence.execute("0", m.getGraph());
         assertTrue(!degreeSeq.isEmpty());
     }
-
-
 }
