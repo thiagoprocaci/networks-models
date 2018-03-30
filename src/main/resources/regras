@@ -1,0 +1,22 @@
+Algoritmo para regerar grafos com base na distancia estrutural
+
+Parte 1
+- Dado um grafo g
+- Para cada par de nó (u, v) percentence a g:
+	- calcular a distancia estrutural entre eles
+
+Parte 2
+
+- Calculadas as distancias estruturais
+- Criar um modelo de geração de grafo que privilegia conectar nós com menor distancia estrutural
+
+
+
+prob = 1 - ((similaridade u-v) / (soma todas as similaridades))
+
+1,2,3 = similaridades
+1 + 2 + 3 = 6 = soma
+
+prob1 = 1 - 1/6 = 1 - 0,16 = 0,84
+prob2 = 1 - 2/6 = 1 - 0,33 = 0,67
+prob3 = 1 - 3/6 = 1 - 0,5 = 0,5

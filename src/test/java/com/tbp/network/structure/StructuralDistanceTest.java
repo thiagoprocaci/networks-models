@@ -65,5 +65,11 @@ public class StructuralDistanceTest {
         assertEquals(4.66, Math.floor(distance * 100) / 100, 0.001);
     }
 
+    @Test
+    public void structuralDistanceSameNode() {
+        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
+        double distance = structuralDistance.execute(g, "U", "U", 2);
+        assertEquals(0, distance, 0.001);
+    }
 
 }
