@@ -1,7 +1,15 @@
 package com.tbp.network.sample;
 
 
+import com.tbp.network.model.BarabasiModel;
+import com.tbp.network.model.ErdosRenyi;
+import com.tbp.network.model.NetworkModel;
+import com.tbp.network.model.RegenerateModel;
+import com.tbp.network.structure.StructuralDistance;
 import com.tbp.network.structure.degreeseq.DegreeSequence;
+import com.tbp.network.structure.dtw.DTW;
+import com.tbp.network.structure.dtw.distance.OtherDistance;
+import com.tbp.network.structure.model.NodesStrucDist;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
@@ -14,10 +22,18 @@ public class Main {
         
         //System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         // new ErdosRenyi(10000);//
-        //NetworkModel model =  new BarabasiModel(10000);
+        NetworkModel model =  new BarabasiModel(1000);
 
-        //model.getGraph().display();
+        DegreeSequence degreeSequence = new DegreeSequence();
+        DTW dtw = new DTW(new OtherDistance());
+        System.out.println("Executando StructuralDistance");
+        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
+        Map<String, NodesStrucDist> nodesStructDistMap = structuralDistance.execute(model.getGraph(), 2);
 
+        System.out.println("Executando RegenerateModel");
+        RegenerateModel regenerateModel = new RegenerateModel(model.getGraph(), nodesStructDistMap);
+        regenerateModel.getGraph().display();
+/*
         Graph g = new SingleGraph("Graph");
 
 
@@ -50,7 +66,7 @@ public class Main {
         Map<Integer, List<Integer>> u = degreeSequence.execute("U", g);
         System.out.println(u);
         u = degreeSequence.execute("V", g);
-        System.out.println(u);
+        System.out.println(u);*/
 
     }
 

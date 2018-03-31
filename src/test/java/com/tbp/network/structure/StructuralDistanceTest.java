@@ -7,14 +7,14 @@ import com.tbp.network.structure.dtw.distance.OtherDistance;
 import com.tbp.network.structure.dtw.DTW;
 import com.tbp.network.structure.model.NodesStrucDist;
 import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
+
 import org.graphstream.graph.implementations.SingleGraph;
 import org.junit.Before;
 import org.junit.Test;
-import scala.math.BigInt;
+
 
 import java.math.BigInteger;
-import java.util.List;
+
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
