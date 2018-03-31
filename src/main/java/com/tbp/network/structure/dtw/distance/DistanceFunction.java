@@ -1,4 +1,4 @@
-package com.tbp.network.structure.distance;
+package com.tbp.network.structure.dtw.distance;
 
 
 public interface DistanceFunction {

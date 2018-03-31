@@ -1,8 +1,9 @@
-package com.tbp.network.structure;
+package com.tbp.network.structure.degreeseq;
 
 
 import com.tbp.network.model.BarabasiModel;
 import com.tbp.network.model.NetworkModel;
+
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.junit.Before;

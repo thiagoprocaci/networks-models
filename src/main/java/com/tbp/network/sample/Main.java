@@ -1,17 +1,10 @@
 package com.tbp.network.sample;
 
 
-import com.tbp.network.gui.GuiBuilder;
-import com.tbp.network.model.BarabasiModel;
-import com.tbp.network.model.ErdosRenyi;
-import com.tbp.network.model.NetworkModel;
-import com.tbp.network.structure.DegreeSequence;
+import com.tbp.network.structure.degreeseq.DegreeSequence;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.view.View;
-import org.graphstream.ui.view.Viewer;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 

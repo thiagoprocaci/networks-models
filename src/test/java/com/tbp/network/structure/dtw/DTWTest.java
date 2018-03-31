@@ -1,8 +1,9 @@
-package com.tbp.network.structure;
+package com.tbp.network.structure.dtw;
 
 
-import com.tbp.network.structure.distance.EuclideanDistance;
-import com.tbp.network.structure.distance.OtherDistance;
+import com.tbp.network.structure.degreeseq.DegreeSequence;
+import com.tbp.network.structure.dtw.distance.EuclideanDistance;
+import com.tbp.network.structure.dtw.distance.OtherDistance;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.junit.Before;

@@ -1,13 +1,25 @@
 package com.tbp.network.structure;
 
 
-import com.tbp.network.structure.distance.OtherDistance;
+import com.tbp.network.model.ErdosRenyi;
+import com.tbp.network.structure.degreeseq.DegreeSequence;
+import com.tbp.network.structure.dtw.distance.OtherDistance;
+import com.tbp.network.structure.dtw.DTW;
+import com.tbp.network.structure.model.NodesStrucDist;
 import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.junit.Before;
 import org.junit.Test;
+import scala.math.BigInt;
+
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class StructuralDistanceTest {
 
@@ -63,6 +75,9 @@ public class StructuralDistanceTest {
         StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
         double distance = structuralDistance.execute(g, "U", "V", 2);
         assertEquals(4.66, Math.floor(distance * 100) / 100, 0.001);
+
+        double distance2 = structuralDistance.execute(g, "V", "U", 2);
+        assertEquals(4.66, Math.floor(distance2 * 100) / 100, 0.001);
     }
 
     @Test
@@ -71,5 +86,35 @@ public class StructuralDistanceTest {
         double distance = structuralDistance.execute(g, "U", "U", 2);
         assertEquals(0, distance, 0.001);
     }
+
+    @Test
+    public void generalTest() {
+        ErdosRenyi erdosRenyi = new ErdosRenyi(200);
+        Graph graph = erdosRenyi.getGraph();
+
+        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
+        Map<String, NodesStrucDist> strucDistMap = structuralDistance.execute(graph, 2);
+        assertNotNull(strucDistMap);
+        BigInteger totalElements = factorial(graph.getNodeCount()).divide((factorial(2).multiply(factorial(graph.getNodeCount() - 2))));
+        assertTrue(totalElements.equals(BigInteger.valueOf(strucDistMap.size())));
+
+        for(String id: strucDistMap.keySet()) {
+            assertNotNull(id);
+            NodesStrucDist nodesStrucDist = strucDistMap.get(id);
+            assertNotNull(nodesStrucDist);
+            assertEquals(NodesStrucDist.generateId(nodesStrucDist.getNode2(), nodesStrucDist.getNode1()), id);
+            assertEquals(NodesStrucDist.generateId(nodesStrucDist.getNode1(), nodesStrucDist.getNode2()), id);
+            assertNotNull(nodesStrucDist.getStructDistance());
+        }
+    }
+
+    public BigInteger factorial(int number) {
+        BigInteger result = BigInteger.valueOf(1);
+        for (long factor = 2; factor <= BigInteger.valueOf(number).longValue(); factor++) {
+            result = result.multiply(BigInteger.valueOf(factor));
+        }
+        return result;
+    }
+
 
 }

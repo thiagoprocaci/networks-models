@@ -1,10 +1,14 @@
-package com.tbp.network.structure;
+package com.tbp.network.structure.dtw;
 
 
-import com.tbp.network.structure.distance.DistanceFunction;
+import com.tbp.network.structure.dtw.distance.DistanceFunction;
 
 import java.util.List;
 
+/**
+ * Dynamic time warping implementation.
+ * Details at: https://en.wikipedia.org/wiki/Dynamic_time_warping
+ */
 public class DTW {
 
     DistanceFunction distanceFunction;

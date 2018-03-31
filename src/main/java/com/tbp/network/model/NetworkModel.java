@@ -55,7 +55,7 @@ public abstract class NetworkModel {
         meanDegree = descriptiveStatistics.getMean();
         thirdQuDegree = descriptiveStatistics.getPercentile(75);
         maxDegree = descriptiveStatistics.getMax();
-        System.out.println(toString());
+     //   System.out.println(toString());
     }
 
     void setStyle() {

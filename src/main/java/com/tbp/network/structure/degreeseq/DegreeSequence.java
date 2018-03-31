@@ -1,4 +1,4 @@
-package com.tbp.network.structure;
+package com.tbp.network.structure.degreeseq;
 
 
 import org.graphstream.graph.Graph;
