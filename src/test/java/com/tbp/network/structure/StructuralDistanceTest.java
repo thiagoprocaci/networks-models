@@ -5,7 +5,7 @@ import com.tbp.network.model.ErdosRenyi;
 import com.tbp.network.structure.degreeseq.DegreeSequence;
 import com.tbp.network.structure.dtw.distance.OtherDistance;
 import com.tbp.network.structure.dtw.DTW;
-import com.tbp.network.structure.model.NodesStrucDist;
+import com.tbp.network.structure.model.StructuralDistanceDto;
 import org.graphstream.graph.Graph;
 
 import org.graphstream.graph.implementations.SingleGraph;
@@ -93,17 +93,17 @@ public class StructuralDistanceTest {
         Graph graph = erdosRenyi.getGraph();
 
         StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
-        Map<String, NodesStrucDist> strucDistMap = structuralDistance.execute(graph, 2);
+        Map<String, StructuralDistanceDto> strucDistMap = structuralDistance.execute(graph, 2);
         assertNotNull(strucDistMap);
         BigInteger totalElements = factorial(graph.getNodeCount()).divide((factorial(2).multiply(factorial(graph.getNodeCount() - 2))));
         assertTrue(totalElements.equals(BigInteger.valueOf(strucDistMap.size())));
 
         for(String id: strucDistMap.keySet()) {
             assertNotNull(id);
-            NodesStrucDist nodesStrucDist = strucDistMap.get(id);
+            StructuralDistanceDto nodesStrucDist = strucDistMap.get(id);
             assertNotNull(nodesStrucDist);
-            assertEquals(NodesStrucDist.generateId(nodesStrucDist.getNode2(), nodesStrucDist.getNode1()), id);
-            assertEquals(NodesStrucDist.generateId(nodesStrucDist.getNode1(), nodesStrucDist.getNode2()), id);
+            assertEquals(StructuralDistanceDto.generateId(nodesStrucDist.getNode2(), nodesStrucDist.getNode1()), id);
+            assertEquals(StructuralDistanceDto.generateId(nodesStrucDist.getNode1(), nodesStrucDist.getNode2()), id);
             assertNotNull(nodesStrucDist.getStructDistance());
         }
     }

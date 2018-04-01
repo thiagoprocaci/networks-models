@@ -2,72 +2,62 @@ package com.tbp.network.sample;
 
 
 import com.tbp.network.model.BarabasiModel;
-import com.tbp.network.model.ErdosRenyi;
 import com.tbp.network.model.NetworkModel;
 import com.tbp.network.model.RegenerateModel;
 import com.tbp.network.structure.StructuralDistance;
 import com.tbp.network.structure.degreeseq.DegreeSequence;
 import com.tbp.network.structure.dtw.DTW;
 import com.tbp.network.structure.dtw.distance.OtherDistance;
-import com.tbp.network.structure.model.NodesStrucDist;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.implementations.SingleGraph;
+import com.tbp.network.structure.model.StructuralDistanceDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Map;
 
 
 public class Main {
-    public static void main(String args[]) {
-        
-        //System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
-        // new ErdosRenyi(10000);//
-        NetworkModel model =  new BarabasiModel(1000);
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
+
+    public Main() {
+        NetworkModel model = createNetwork();
+        Map<String, StructuralDistanceDto> dtoMap = structuralDistance(model);
+        recreateNetwork(dtoMap, model);
+    }
+
+    NetworkModel createNetwork() {
+        LOGGER.info("Starting model creation");
+        long startTime = System.currentTimeMillis();
+        NetworkModel model =  new BarabasiModel(1000);
+        long totalTime = System.currentTimeMillis() - startTime;
+        LOGGER.info("Model creation took {} ms - {} s", totalTime, totalTime/1000);
+        return model;
+    }
+
+    Map<String, StructuralDistanceDto>  structuralDistance(NetworkModel model) {
+        LOGGER.info("Starting structural distance execution");
+        long startTime = System.currentTimeMillis();
         DegreeSequence degreeSequence = new DegreeSequence();
         DTW dtw = new DTW(new OtherDistance());
-        System.out.println("Executando StructuralDistance");
         StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
-        Map<String, NodesStrucDist> nodesStructDistMap = structuralDistance.execute(model.getGraph(), 2);
+        Map<String, StructuralDistanceDto> distanceDtoMap = structuralDistance.execute(model.getGraph(), 2);
+        long totalTime = System.currentTimeMillis() - startTime;
+        LOGGER.info("Structural distance execution took {} ms - {} s", totalTime, totalTime/1000);
+        return  distanceDtoMap;
+    }
 
-        System.out.println("Executando RegenerateModel");
-        RegenerateModel regenerateModel = new RegenerateModel(model.getGraph(), nodesStructDistMap);
+    void recreateNetwork( Map<String, StructuralDistanceDto> distanceDtoMap, NetworkModel model) {
+        LOGGER.info("Network recreation");
+        long startTime = System.currentTimeMillis();
+        RegenerateModel regenerateModel = new RegenerateModel(model.getGraph(), distanceDtoMap);
+        long totalTime = System.currentTimeMillis() - startTime;
+        LOGGER.info("Network recreation took {} ms - {} s", totalTime, totalTime/1000);
         regenerateModel.getGraph().display();
-/*
-        Graph g = new SingleGraph("Graph");
+    }
 
 
-        g.addNode("A");
-        g.addNode("B");
-        g.addNode("C");
-        g.addNode("U");
-        g.addNode("V");
-        g.addNode("D");
-        g.addNode("E");
-        g.addNode("F");
-        g.addNode("G");
-
-
-        g.addEdge("A_B", "A", "B");
-        g.addEdge("A_C", "A", "C");
-        g.addEdge("C_B", "C", "B");
-        g.addEdge("B_V", "B", "V");
-        g.addEdge("B_U", "B", "U");
-        g.addEdge("U_V", "U", "V");
-        g.addEdge("U_E", "U", "E");
-        g.addEdge("U_D", "U", "D");
-        g.addEdge("V_D", "V", "D");
-        g.addEdge("D_F", "D", "F");
-        g.addEdge("D_G", "D", "G");
-        g.addEdge("F_G", "F", "G");
-
-        DegreeSequence degreeSequence = new DegreeSequence();
-
-        Map<Integer, List<Integer>> u = degreeSequence.execute("U", g);
-        System.out.println(u);
-        u = degreeSequence.execute("V", g);
-        System.out.println(u);*/
-
+    public static void main(String args[]) {
+        new Main();
     }
 
 }

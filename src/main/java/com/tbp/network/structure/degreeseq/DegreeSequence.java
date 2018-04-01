@@ -16,13 +16,12 @@ public class DegreeSequence {
      *
      * @param startNode
      * @param graph
+     * @param  maxLevel of searching
      * @return map where the key is the distance from the startNode and
      * the value is the degree list of the nodes with distance key from startNode.
      */
-    public Map<Integer, List<Integer>> execute(String startNode, Graph graph) {
-
+    public Map<Integer, List<Integer>> execute(String startNode, Graph graph, Integer maxLevel) {
         Map<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
-
         Node root = graph.getNode(startNode);
         root.setAttribute(VISITED, true);
         root.setAttribute(LEVEL, 0);
@@ -31,20 +30,44 @@ public class DegreeSequence {
         while(!queue.isEmpty()) {
             Node node = queue.remove();
             Integer currentLevel = node.getAttribute(LEVEL, Integer.class);
-            if(map.get(currentLevel) == null) {
-                map.put(currentLevel, new ArrayList<Integer>());
-            }
-            map.get(currentLevel).add(node.getDegree());
-            Node child;
-            while((child = getUnvisitedChildNode(node)) != null) {
-                child.setAttribute(VISITED, true);
-                child.setAttribute(LEVEL, node.getAttribute(LEVEL, Integer.class) + 1);
-                queue.add(child);
+            if(maxLevelCondition(maxLevel, currentLevel)) {
+                if(map.get(currentLevel) == null) {
+                    map.put(currentLevel, new ArrayList<Integer>());
+                }
+                map.get(currentLevel).add(node.getDegree());
+                Node child;
+                while((child = getUnvisitedChildNode(node)) != null) {
+                    child.setAttribute(VISITED, true);
+                    child.setAttribute(LEVEL, node.getAttribute(LEVEL, Integer.class) + 1);
+                    queue.add(child);
+                }
             }
         }
         cleanVisited(graph);
         sortList(map);
         return map;
+    }
+
+
+    /**
+     *
+     * @param startNode
+     * @param graph
+     * @return map where the key is the distance from the startNode and
+     * the value is the degree list of the nodes with distance key from startNode.
+     */
+    public Map<Integer, List<Integer>> execute(String startNode, Graph graph) {
+        return execute(startNode, graph, null);
+    }
+
+    private boolean maxLevelCondition(Integer maxLevel, Integer currentLevel) {
+        if(maxLevel == null) {
+            return true;
+        }
+        if(currentLevel <= maxLevel) {
+            return true;
+        }
+        return false;
     }
 
     private void sortList(Map<Integer, List<Integer>> map) {

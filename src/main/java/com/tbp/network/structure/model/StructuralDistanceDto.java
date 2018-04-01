@@ -5,15 +5,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class NodesStrucDist {
+/**
+ * Dto that stores the structural distance between two nodes
+ */
+public class StructuralDistanceDto {
 
-    String id;
+    String id; // id of the dto
     String node1;
     String node2;
     Double structDistance;
 
 
-    public NodesStrucDist(String node1, String node2, Double structDistance) {
+    /**
+     *
+     * @param node1 id of the first node
+     * @param node2 id of the second node
+     * @param structDistance structutal distance
+     */
+    public StructuralDistanceDto(String node1, String node2, Double structDistance) {
         this.node1 = node1;
         this.node2 = node2;
         this.structDistance = structDistance;
