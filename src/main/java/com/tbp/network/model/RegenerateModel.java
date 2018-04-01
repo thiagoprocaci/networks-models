@@ -1,5 +1,7 @@
 package com.tbp.network.model;
 
+import com.tbp.network.mst.KruskalMST;
+import com.tbp.network.mst.KruskalQuickFind;
 import com.tbp.network.structure.model.StructuralDistanceDto;
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 
@@ -49,21 +51,51 @@ public class RegenerateModel  {
 
 
     Graph generate2(Graph oldGraph, Map<String, StructuralDistanceDto> dtoMap) {
-        Graph g =  createNewGraphWithNodeOf(oldGraph);
+        KruskalMST kruskalMST = new KruskalQuickFind();
+        kruskalMST.run(dtoMap, oldGraph);
+        Graph g = new SingleGraph("Regenerated model based on structural distance");
+
+        Iterable<StructuralDistanceDto> edges = kruskalMST.edges();
+        Iterator<StructuralDistanceDto> iterator = edges.iterator();
+        while(iterator.hasNext()) {
+            StructuralDistanceDto next = iterator.next();
+            if(g.getNode(next.getNode1()) == null) {
+                Node newNode = g.addNode(next.getNode1());
+                newNode.addAttribute(PREVIOUS_DEGREE, oldGraph.getNode(next.getNode1()).getDegree());
+            }
+            if(g.getNode(next.getNode2()) == null) {
+                Node newNode = g.addNode(next.getNode2());
+                newNode.addAttribute(PREVIOUS_DEGREE, oldGraph.getNode(next.getNode2()).getDegree());
+            }
+            try {
+                g.addEdge(next.getNode1() + "_" + next.getNode2(), next.getNode1(), next.getNode2());
+            } catch (IdAlreadyInUseException | EdgeRejectedException e) {
+                // LOGGER.warn(e.getMessage());
+            }
+        }
+
+
+
+        /*Node newNode = g.addNode(oldGraph.getNode(0).getId());
+        newNode.addAttribute(PREVIOUS_DEGREE, oldGraph.getNode(0).getDegree());
+
         DescriptiveStatistics d = describeDistances(dtoMap);
         Integer totalNodes = oldGraph.getNodeCount();
 
-        int index = 0;
-        int totalIterations = totalNodes * 10;
+        int index = 1;
+        int totalIterations = totalNodes;
         int iterationWithoutConnections = 0;
         while(index < totalIterations) {
-            int node1 = random.nextInt(totalNodes);
-            int node2 = random.nextInt(totalNodes);
-            while(node1 == node2) {
-                node2 = random.nextInt(totalNodes);
+            Node source;
+            if(index < g.getNodeCount()) {
+                source = g.getNode(index);
+            } else {
+                source = g.addNode(oldGraph.getNode(index).getId());
+                source.addAttribute(PREVIOUS_DEGREE, oldGraph.getNode(index).getDegree());
             }
-            String nodeId1 = g.getNode(node1).getId();
-            String nodeId2 = g.getNode(node2).getId();
+            Node dest = g.getNode(random.nextInt(g.getNodeCount() - 1));
+            String nodeId1 = source.getId();
+            String nodeId2 = dest.getId();
             Double distance = dtoMap.get(StructuralDistanceDto.generateId(nodeId1, nodeId2)).getStructDistance();
             iterationWithoutConnections++;
             if(distance < d.getPercentile(25)) {
@@ -75,11 +107,12 @@ public class RegenerateModel  {
                    // LOGGER.warn(e.getMessage());
                 }
             }
-            if(iterationWithoutConnections == 1000) {
+            if(iterationWithoutConnections ==  100) {
                 LOGGER.warn("The model seems to be stuck");
+                index++;
             }
 
-        }
+        }*/
         return g;
     }
 

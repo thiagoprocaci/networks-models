@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Dto that stores the structural distance between two nodes
  */
-public class StructuralDistanceDto {
+public class StructuralDistanceDto implements Comparable<StructuralDistanceDto> {
 
     String id; // id of the dto
     String node1;
@@ -51,5 +51,16 @@ public class StructuralDistanceDto {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public int compareTo(StructuralDistanceDto o) {
+        if (this.getStructDistance() < o.getStructDistance()){
+            return -1;
+        }
+        if (this.getStructDistance() > o.getStructDistance()) {
+            return 1;
+        }
+        return 0;
     }
 }
