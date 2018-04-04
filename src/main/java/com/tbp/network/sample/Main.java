@@ -42,7 +42,7 @@ public class Main {
     NetworkModel createNetwork() {
         LOGGER.info("Starting model creation");
         long startTime = System.currentTimeMillis();
-        NetworkModel model =  new BarabasiModel(1000 * 6, performanceTime );
+        NetworkModel model =  new BarabasiModel(1000 * 1, performanceTime );
         long totalTime = System.currentTimeMillis() - startTime;
         LOGGER.info("Model creation took {} ms - {} s", totalTime, totalTime/1000);
         return model;
@@ -54,7 +54,7 @@ public class Main {
         DegreeSequence degreeSequence = new DegreeSequence();
         DTW dtw = new DTW(new OtherDistance());
         StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, performanceTime);
-        Map<String, StructuralDistanceDto> distanceDtoMap = structuralDistance.execute(model.getGraph(), 1);
+        Map<String, StructuralDistanceDto> distanceDtoMap = structuralDistance.execute2(model.getGraph(), 1);
         long totalTime = System.currentTimeMillis() - startTime;
         LOGGER.info("Structural distance execution took {} ms - {} s", totalTime, totalTime/1000);
         return  distanceDtoMap;

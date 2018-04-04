@@ -114,4 +114,8 @@ public abstract class NetworkModel {
     public Graph getGraph() {
         return graph;
     }
+
+    public DescriptiveStatistics getDescriptiveStatistics() {
+        return descriptiveStatistics;
+    }
 }
