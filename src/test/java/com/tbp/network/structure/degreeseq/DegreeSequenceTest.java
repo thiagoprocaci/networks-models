@@ -4,6 +4,7 @@ package com.tbp.network.structure.degreeseq;
 import com.tbp.network.model.BarabasiModel;
 import com.tbp.network.model.NetworkModel;
 
+import com.tbp.network.performance.PerformanceTime;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.junit.Before;
@@ -93,14 +94,14 @@ public class DegreeSequenceTest {
 
     @Test
     public void noException() {
-        NetworkModel m = new BarabasiModel(1000);
+        NetworkModel m = new BarabasiModel(1000, new PerformanceTime());
         Map<Integer, List<Integer>> degreeSeq = degreeSequence.execute("0", m.getGraph());
         assertTrue(!degreeSeq.isEmpty());
     }
 
     @Test
     public void noExceptionWithMaxLevel() {
-        NetworkModel m = new BarabasiModel(1000);
+        NetworkModel m = new BarabasiModel(1000, new PerformanceTime());
         Map<Integer, List<Integer>> degreeSeq = degreeSequence.execute("0", m.getGraph(), 4);
         assertTrue(!degreeSeq.isEmpty());
         assertEquals(5, degreeSeq.size());
@@ -116,7 +117,7 @@ public class DegreeSequenceTest {
 
     @Test
     public void perfomanceTest() {
-        NetworkModel m = new BarabasiModel(1000);
+        NetworkModel m = new BarabasiModel(1000, new PerformanceTime());
         long startTime = System.currentTimeMillis();
         degreeSequence.execute("0", m.getGraph());
         long totalTime1 = System.currentTimeMillis() - startTime;

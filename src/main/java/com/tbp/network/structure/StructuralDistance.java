@@ -1,6 +1,7 @@
 package com.tbp.network.structure;
 
 
+import com.tbp.network.performance.PerformanceTime;
 import com.tbp.network.structure.degreeseq.DegreeSequence;
 import com.tbp.network.structure.dtw.DTW;
 import com.tbp.network.structure.model.StructuralDistanceDto;
@@ -16,21 +17,25 @@ import java.util.*;
  */
 public class StructuralDistance {
     private static final Logger LOGGER = LoggerFactory.getLogger(StructuralDistance.class);
+
     DegreeSequence degreeSequence;
     DTW dtw;
+    PerformanceTime performanceTime;
 
-    public StructuralDistance(DegreeSequence degreeSequence, DTW dtw) {
+    public StructuralDistance(DegreeSequence degreeSequence, DTW dtw, PerformanceTime performanceTime) {
         this.degreeSequence = degreeSequence;
         this.dtw = dtw;
+        this.performanceTime = performanceTime;
     }
 
     public Map<String, StructuralDistanceDto> execute(Graph g, int maxDistance) {
+        performanceTime.addStartTime("COMPLETE_STRUCTURAL_EXECUTION");
         Map<String, StructuralDistanceDto>  strucDistHashMap = new HashMap<String, StructuralDistanceDto>();
         Iterator<? extends Node> node1Iterator = g.getEachNode().iterator();
         while(node1Iterator.hasNext()) {
-            long startTime = System.currentTimeMillis();
             Node firstNode = node1Iterator.next();
             String node1 = firstNode.getId();
+            LOGGER.trace("Starting calc. structural distance of node {} to all.", node1);
             Iterator<? extends Node> node2Iterator = g.getEachNode().iterator();
             while(node2Iterator.hasNext()) {
                 Node secondNode = node2Iterator.next();
@@ -42,22 +47,27 @@ public class StructuralDistance {
                     strucDistHashMap.put(dto.getId(), dto);
                 }
              }
-            long totalTime = (System.currentTimeMillis() - startTime);
-            LOGGER.trace("Calc. structural distance of node {} to all. It took {} ms.", node1, totalTime);
+
         }
+        performanceTime.addTotalTime("COMPLETE_STRUCTURAL_EXECUTION");
         return strucDistHashMap;
     }
 
-    public double execute(Graph g, String node1, String node2, int maxDistance) {
+    double execute(Graph g, String node1, String node2, int maxDistance) {
+        performanceTime.addStartTime("DEGREE_SEQUENCE");
         int i = 0;
         Map<Integer, List<Integer>> s = degreeSequence.execute(node1, g, maxDistance);
         Map<Integer, List<Integer>> t = degreeSequence.execute(node2, g, maxDistance);
+        performanceTime.addTotalTime("DEGREE_SEQUENCE");
+
+        performanceTime.addStartTime("DTW_FUNCTION");
         double sum = 0d;
         while(i <= maxDistance) {
             double val = dtw.execute(s.get(i), t.get(i));
             sum = sum + val;
             i++;
         }
+        performanceTime.addTotalTime("DTW_FUNCTION");
         return sum;
     }
 }

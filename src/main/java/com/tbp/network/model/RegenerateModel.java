@@ -32,25 +32,14 @@ public class RegenerateModel  {
 
     public RegenerateModel(Graph oldGraph, Map<String, StructuralDistanceDto> nodesStrucDistMap) {
         this.random = new Random();
-        this.graph = generate2(oldGraph, nodesStrucDistMap);
+        this.graph = generate(oldGraph, nodesStrucDistMap);
         this.descriptiveStatistics = new DescriptiveStatistics();
         this.summaryPreviousDegree();
         this.setStyle();
     }
 
-    Graph createNewGraphWithNodeOf(Graph oldGraph) {
-        Graph g = new SingleGraph("Regenerated model based on structural distance");
-        Iterator<? extends Node> nodeIterator = oldGraph.getEachNode().iterator();
-        while(nodeIterator.hasNext()) {
-            Node node = nodeIterator.next();
-            Node newNode = g.addNode(node.getId());
-            newNode.addAttribute(PREVIOUS_DEGREE, node.getDegree());
-        }
-        return g;
-    }
 
-
-    Graph generate2(Graph oldGraph, Map<String, StructuralDistanceDto> dtoMap) {
+    Graph generate(Graph oldGraph, Map<String, StructuralDistanceDto> dtoMap) {
         KruskalMST kruskalMST = new KruskalQuickFind();
         kruskalMST.run(dtoMap, oldGraph);
         Graph g = new SingleGraph("Regenerated model based on structural distance");
@@ -73,46 +62,6 @@ public class RegenerateModel  {
                 // LOGGER.warn(e.getMessage());
             }
         }
-
-
-
-        /*Node newNode = g.addNode(oldGraph.getNode(0).getId());
-        newNode.addAttribute(PREVIOUS_DEGREE, oldGraph.getNode(0).getDegree());
-
-        DescriptiveStatistics d = describeDistances(dtoMap);
-        Integer totalNodes = oldGraph.getNodeCount();
-
-        int index = 1;
-        int totalIterations = totalNodes;
-        int iterationWithoutConnections = 0;
-        while(index < totalIterations) {
-            Node source;
-            if(index < g.getNodeCount()) {
-                source = g.getNode(index);
-            } else {
-                source = g.addNode(oldGraph.getNode(index).getId());
-                source.addAttribute(PREVIOUS_DEGREE, oldGraph.getNode(index).getDegree());
-            }
-            Node dest = g.getNode(random.nextInt(g.getNodeCount() - 1));
-            String nodeId1 = source.getId();
-            String nodeId2 = dest.getId();
-            Double distance = dtoMap.get(StructuralDistanceDto.generateId(nodeId1, nodeId2)).getStructDistance();
-            iterationWithoutConnections++;
-            if(distance < d.getPercentile(25)) {
-                try {
-                    g.addEdge(nodeId1 + "_" + nodeId2, nodeId1, nodeId2);
-                    index++;
-                    iterationWithoutConnections = 0;
-                } catch (IdAlreadyInUseException | EdgeRejectedException e) {
-                   // LOGGER.warn(e.getMessage());
-                }
-            }
-            if(iterationWithoutConnections ==  100) {
-                LOGGER.warn("The model seems to be stuck");
-                index++;
-            }
-
-        }*/
         return g;
     }
 

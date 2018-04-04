@@ -1,6 +1,7 @@
 package com.tbp.network.model;
 
 
+import com.tbp.network.performance.PerformanceTime;
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
@@ -22,18 +23,21 @@ public abstract class NetworkModel {
     double thirdQuDegree;
     double maxDegree;
 
+    PerformanceTime performanceTime;
 
-    public NetworkModel(Integer numNodes) {
+    public NetworkModel(Integer numNodes, PerformanceTime performanceTime) {
         if(numNodes == null || numNodes < 10) {
             throw new IllegalArgumentException("Number of nodes must be >= 10");
         }
+        this.performanceTime = performanceTime;
+        performanceTime.addStartTime(modelName());
         this.random = new Random();
         this.numNodes = numNodes;
         this.graph = generate();
         this.descriptiveStatistics = new DescriptiveStatistics();
         this.summaryDegree();
         this.setStyle();
-    //    this.graph.display();
+        performanceTime.addTotalTime(modelName());
     }
 
     double nextDouble() {
@@ -104,6 +108,8 @@ public abstract class NetworkModel {
     }
 
     abstract Graph generate();
+
+    abstract String modelName();
 
     public Graph getGraph() {
         return graph;

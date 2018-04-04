@@ -1,6 +1,7 @@
 package com.tbp.network.model;
 
 
+import com.tbp.network.performance.PerformanceTime;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -9,8 +10,8 @@ import org.graphstream.graph.implementations.SingleGraph;
 public class BarabasiModel extends NetworkModel {
 
 
-    public BarabasiModel(Integer numNodes) {
-        super(numNodes);
+    public BarabasiModel(Integer numNodes, PerformanceTime performanceTime) {
+        super(numNodes, performanceTime);
     }
 
     @Override
@@ -42,10 +43,10 @@ public class BarabasiModel extends NetworkModel {
         return g;
     }
 
-
-
-
-
+    @Override
+    String modelName() {
+        return "barabasi_growth_model";
+    }
 
 
 }

@@ -21,29 +21,30 @@ public class DegreeSequence {
      * the value is the degree list of the nodes with distance key from startNode.
      */
     public Map<Integer, List<Integer>> execute(String startNode, Graph graph, Integer maxLevel) {
-        Map<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        Map<String, Boolean> visitedNodeMap = new HashMap<>();
         Node root = graph.getNode(startNode);
-        root.setAttribute(VISITED, true);
+        visitedNodeMap.put(root.getId(), true);
         root.setAttribute(LEVEL, 0);
-        Queue<Node> queue = new LinkedList<Node>();
+        Queue<Node> queue = new LinkedList<>();
         queue.add(root);
         while(!queue.isEmpty()) {
             Node node = queue.remove();
             Integer currentLevel = node.getAttribute(LEVEL, Integer.class);
-            if(maxLevelCondition(maxLevel, currentLevel)) {
+
                 if(map.get(currentLevel) == null) {
                     map.put(currentLevel, new ArrayList<Integer>());
                 }
                 map.get(currentLevel).add(node.getDegree());
                 Node child;
-                while((child = getUnvisitedChildNode(node)) != null) {
-                    child.setAttribute(VISITED, true);
+            if(maxLevelCondition(maxLevel, currentLevel + 1)) {
+                while((child = getUnvisitedChildNode(node, visitedNodeMap)) != null) {
+                    visitedNodeMap.put(child.getId(), true);
                     child.setAttribute(LEVEL, node.getAttribute(LEVEL, Integer.class) + 1);
                     queue.add(child);
                 }
             }
         }
-        cleanVisited(graph);
         sortList(map);
         return map;
     }
@@ -78,18 +79,12 @@ public class DegreeSequence {
         }
     }
 
-    private void cleanVisited(Graph graph) {
-        Iterable<? extends Node> eachNode = graph.getEachNode();
-        for(Node n: eachNode) {
-            n.setAttribute(VISITED, false);
-        }
-    }
 
-    private Node getUnvisitedChildNode(Node node) {
+    private Node getUnvisitedChildNode(Node node, Map<String, Boolean> visitedNodeMap) {
         Iterator<Node> neighborNodeIterator = node.getNeighborNodeIterator();
         while(neighborNodeIterator.hasNext()) {
             Node next = neighborNodeIterator.next();
-            Boolean visited = next.getAttribute(VISITED, Boolean.class);
+            Boolean visited = visitedNodeMap.get(next.getId()); //next.getAttribute(VISITED, Boolean.class);
             if(visited == null || !visited) {
                 return next;
             }

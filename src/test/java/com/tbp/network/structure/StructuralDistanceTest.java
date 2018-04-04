@@ -2,6 +2,7 @@ package com.tbp.network.structure;
 
 
 import com.tbp.network.model.ErdosRenyi;
+import com.tbp.network.performance.PerformanceTime;
 import com.tbp.network.structure.degreeseq.DegreeSequence;
 import com.tbp.network.structure.dtw.distance.OtherDistance;
 import com.tbp.network.structure.dtw.DTW;
@@ -58,21 +59,21 @@ public class StructuralDistanceTest {
 
     @Test
     public void structuralDistanceMaxZero() {
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
+        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
         double distance = structuralDistance.execute(g, "U", "V", 0);
         assertEquals(0.33, Math.floor(distance * 100) / 100, 0.001);
     }
 
     @Test
     public void structuralDistanceMaxOne() {
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
+        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
         double distance = structuralDistance.execute(g, "U", "V", 1);
         assertEquals(3.66, Math.floor(distance * 100) / 100, 0.001);
     }
 
     @Test
     public void structuralDistanceMaxTwo() {
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
+        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
         double distance = structuralDistance.execute(g, "U", "V", 2);
         assertEquals(4.66, Math.floor(distance * 100) / 100, 0.001);
 
@@ -82,17 +83,17 @@ public class StructuralDistanceTest {
 
     @Test
     public void structuralDistanceSameNode() {
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
+        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
         double distance = structuralDistance.execute(g, "U", "U", 2);
         assertEquals(0, distance, 0.001);
     }
 
     @Test
     public void generalTest() {
-        ErdosRenyi erdosRenyi = new ErdosRenyi(200);
+        ErdosRenyi erdosRenyi = new ErdosRenyi(200, new PerformanceTime());
         Graph graph = erdosRenyi.getGraph();
 
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw);
+        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
         Map<String, StructuralDistanceDto> strucDistMap = structuralDistance.execute(graph, 2);
         assertNotNull(strucDistMap);
         BigInteger totalElements = factorial(graph.getNodeCount()).divide((factorial(2).multiply(factorial(graph.getNodeCount() - 2))));

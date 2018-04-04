@@ -1,5 +1,6 @@
 package com.tbp.network.model;
 
+import com.tbp.network.performance.PerformanceTime;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -8,8 +9,8 @@ import org.graphstream.graph.implementations.SingleGraph;
 
 public class ErdosRenyi extends NetworkModel {
 
-    public ErdosRenyi(Integer numNodes) {
-        super(numNodes);
+    public ErdosRenyi(Integer numNodes, PerformanceTime performanceTime) {
+        super(numNodes, performanceTime);
     }
 
     @Override
@@ -28,6 +29,11 @@ public class ErdosRenyi extends NetworkModel {
             i++;
         }
         return g;
+    }
+
+    @Override
+    String modelName() {
+        return "erdosRenyi_growth_model";
     }
 
 }
