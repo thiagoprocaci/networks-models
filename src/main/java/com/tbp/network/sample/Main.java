@@ -11,10 +11,13 @@ import com.tbp.network.structure.dtw.DTW;
 import com.tbp.network.structure.dtw.distance.OtherDistance;
 import com.tbp.network.structure.model.StructuralDistanceDto;
 
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -29,20 +32,36 @@ public class Main {
         NetworkModel model = createNetwork();
         LOGGER.info(model.toString());
         LOGGER.info("Number of nodes = {} and edges =  {}", model.getGraph().getNodeCount(), model.getGraph().getEdgeCount());
-        //  iterateOverAllPairs(model.getGraph());
+        //iterateOverAllPairs(model.getGraph());
         Map<String, StructuralDistanceDto> dtoMap = structuralDistance(model);
         performanceTime.avgTime();
         recreateNetwork(dtoMap, model);
         model.getGraph().display();
     }
 
-
+    private void iterateOverAllPairs(Graph g) {
+        performanceTime.addStartTime("ALL_PAIRS");
+        Iterator<? extends Node> node1Iterator = g.getEachNode().iterator();
+        while(node1Iterator.hasNext()) {
+            Node firstNode = node1Iterator.next();
+            String node1 = firstNode.getId();
+            Iterator<? extends Node> node2Iterator = g.getEachNode().iterator();
+            while(node2Iterator.hasNext()) {
+                Node secondNode = node2Iterator.next();
+                String node2 = secondNode.getId();
+                if(node1.equals(node2)) {
+                    continue;
+                }
+            }
+        }
+        performanceTime.addTotalTime("ALL_PAIRS");
+    }
 
 
     NetworkModel createNetwork() {
         LOGGER.info("Starting model creation");
         long startTime = System.currentTimeMillis();
-        NetworkModel model =  new BarabasiModel(1000 * 1, performanceTime );
+        NetworkModel model =  new BarabasiModel(200 * 10, performanceTime );
         long totalTime = System.currentTimeMillis() - startTime;
         LOGGER.info("Model creation took {} ms - {} s", totalTime, totalTime/1000);
         return model;
@@ -54,7 +73,7 @@ public class Main {
         DegreeSequence degreeSequence = new DegreeSequence();
         DTW dtw = new DTW(new OtherDistance());
         StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, performanceTime);
-        Map<String, StructuralDistanceDto> distanceDtoMap = structuralDistance.execute2(model.getGraph(), 1);
+        Map<String, StructuralDistanceDto> distanceDtoMap = structuralDistance.execute(model.getGraph(), 1);
         long totalTime = System.currentTimeMillis() - startTime;
         LOGGER.info("Structural distance execution took {} ms - {} s", totalTime, totalTime/1000);
         return  distanceDtoMap;
