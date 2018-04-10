@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import static org.junit.Assert.*;
 
-public class DTWTest {
+public class TraditionalDTWTest {
 
     Graph g;
     DegreeSequence degreeSequence;
@@ -52,7 +52,7 @@ public class DTWTest {
         Map<Integer, List<Integer>> s = degreeSequence.execute("U", g);
         Map<Integer, List<Integer>> t = degreeSequence.execute("V", g);
 
-        DTW dtw = new DTW(new OtherDistance());
+        TraditionalDTW dtw = new TraditionalDTW(new OtherDistance());
 
         double val = dtw.execute(s.get(0), t.get(0));
         assertEquals(0.33, Math.floor(val * 100) / 100, 0.001);
@@ -79,7 +79,7 @@ public class DTWTest {
             t1.add(t[i]);
         }
 
-        DTW dtw = new DTW(new EuclideanDistance());
+        TraditionalDTW dtw = new TraditionalDTW(new EuclideanDistance());
         double val = dtw.execute(s1, t1);
 
 

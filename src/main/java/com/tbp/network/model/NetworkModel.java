@@ -115,7 +115,7 @@ public abstract class NetworkModel {
         return graph;
     }
 
-    public DescriptiveStatistics getDescriptiveStatistics() {
-        return descriptiveStatistics;
+    public double getThirdQuDegree() {
+        return thirdQuDegree;
     }
 }

@@ -2,6 +2,7 @@ package com.tbp.network.performance;
 
 
 import com.tbp.network.sample.Main;
+import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,14 +34,12 @@ public class PerformanceTime {
 
     void avgTime(String id) {
         List<Long> longList = totalTimeMap.get(id);
+        DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
         if(longList != null && !longList.isEmpty()) {
-            double sum = 0;
             for(Long time : longList) {
-                sum = sum + time;
+                descriptiveStatistics.addValue(time);
             }
-            double avgTime = sum/longList.size();
-            avgTime = Math.floor(avgTime * 100) / 100;
-            LOGGER.info("Avg. time of {} equals to {} ms - {} s.", id, avgTime, avgTime/1000);
+            LOGGER.info(getStats(descriptiveStatistics, id));
         }
     }
 
@@ -53,6 +52,23 @@ public class PerformanceTime {
         totalTimeMap.clear();
     }
 
+
+    String getStats(DescriptiveStatistics descriptiveStatistics, String id) {
+        double min = descriptiveStatistics.getMin();
+        double firstQu = descriptiveStatistics.getPercentile(25);
+        double median = descriptiveStatistics.getPercentile(50);
+        double mean = descriptiveStatistics.getMean();
+        double thirdQu = descriptiveStatistics.getPercentile(75);
+        double max = descriptiveStatistics.getMax();
+        return id + " ms {" +
+                "min=" + min +
+                ", firstQu=" + firstQu +
+                ", median=" + median +
+                ", mean=" + mean +
+                ", thirdQu=" + thirdQu +
+                ", max=" + max +
+                '}';
+    }
 
 
 

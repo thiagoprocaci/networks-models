@@ -5,7 +5,7 @@ import com.tbp.network.model.ErdosRenyi;
 import com.tbp.network.performance.PerformanceTime;
 import com.tbp.network.structure.degreeseq.DegreeSequence;
 import com.tbp.network.structure.dtw.distance.OtherDistance;
-import com.tbp.network.structure.dtw.DTW;
+import com.tbp.network.structure.dtw.TraditionalDTW;
 import com.tbp.network.structure.model.StructuralDistanceDto;
 import org.graphstream.graph.Graph;
 
@@ -22,11 +22,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class StructuralDistanceTest {
+public class CompleteStructuralDistanceTest {
 
     Graph g;
     DegreeSequence degreeSequence;
-    DTW dtw;
+    TraditionalDTW dtw;
 
     @Before
     public void before() {
@@ -54,37 +54,37 @@ public class StructuralDistanceTest {
         g.addEdge("F_G", "F", "G");
 
         degreeSequence = new DegreeSequence();
-        dtw = new DTW(new OtherDistance());
+        dtw = new TraditionalDTW(new OtherDistance());
     }
 
     @Test
     public void structuralDistanceMaxZero() {
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
-        double distance = structuralDistance.execute(g, "U", "V", 0);
+        CompleteStructuralDistance structuralDistance = new CompleteStructuralDistance(degreeSequence, dtw, new PerformanceTime());
+        double distance = structuralDistance.dtwBetweenNodes(g, "U", "V", 0);
         assertEquals(0.33, Math.floor(distance * 100) / 100, 0.001);
     }
 
     @Test
     public void structuralDistanceMaxOne() {
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
-        double distance = structuralDistance.execute(g, "U", "V", 1);
+        CompleteStructuralDistance structuralDistance = new CompleteStructuralDistance(degreeSequence, dtw, new PerformanceTime());
+        double distance = structuralDistance.dtwBetweenNodes(g, "U", "V", 1);
         assertEquals(3.66, Math.floor(distance * 100) / 100, 0.001);
     }
 
     @Test
     public void structuralDistanceMaxTwo() {
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
-        double distance = structuralDistance.execute(g, "U", "V", 2);
+        CompleteStructuralDistance structuralDistance = new CompleteStructuralDistance(degreeSequence, dtw, new PerformanceTime());
+        double distance = structuralDistance.dtwBetweenNodes(g, "U", "V", 2);
         assertEquals(4.66, Math.floor(distance * 100) / 100, 0.001);
 
-        double distance2 = structuralDistance.execute(g, "V", "U", 2);
+        double distance2 = structuralDistance.dtwBetweenNodes(g, "V", "U", 2);
         assertEquals(4.66, Math.floor(distance2 * 100) / 100, 0.001);
     }
 
     @Test
     public void structuralDistanceSameNode() {
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
-        double distance = structuralDistance.execute(g, "U", "U", 2);
+        CompleteStructuralDistance structuralDistance = new CompleteStructuralDistance(degreeSequence, dtw, new PerformanceTime());
+        double distance = structuralDistance.dtwBetweenNodes(g, "U", "U", 2);
         assertEquals(0, distance, 0.001);
     }
 
@@ -93,8 +93,8 @@ public class StructuralDistanceTest {
         ErdosRenyi erdosRenyi = new ErdosRenyi(200, new PerformanceTime());
         Graph graph = erdosRenyi.getGraph();
 
-        StructuralDistance structuralDistance = new StructuralDistance(degreeSequence, dtw, new PerformanceTime());
-        Map<String, StructuralDistanceDto> strucDistMap = structuralDistance.execute(graph, 2);
+        StructuralDistance structuralDistance = new CompleteStructuralDistance(degreeSequence, dtw, new PerformanceTime());
+        Map<String, StructuralDistanceDto> strucDistMap = structuralDistance.execute(erdosRenyi, 2);
         assertNotNull(strucDistMap);
         BigInteger totalElements = factorial(graph.getNodeCount()).divide((factorial(2).multiply(factorial(graph.getNodeCount() - 2))));
         assertTrue(totalElements.equals(BigInteger.valueOf(strucDistMap.size())));
