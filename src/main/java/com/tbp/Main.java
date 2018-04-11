@@ -1,11 +1,13 @@
-package com.tbp.network.sample;
+package com.tbp;
 
 
+import com.tbp.database.model.GraphAnalysisContext;
+import com.tbp.database.repository.GraphAnalysisContextRepository;
+import com.tbp.database.service.StructDistanceService;
 import com.tbp.network.model.BarabasiModel;
 import com.tbp.network.model.NetworkModel;
 import com.tbp.network.model.RegenerateModel;
 import com.tbp.network.performance.PerformanceTime;
-import com.tbp.network.structure.CompleteStructuralDistance;
 import com.tbp.network.structure.StructuralDistance;
 import com.tbp.network.structure.ThirdQuStructuralDistance;
 import com.tbp.network.structure.degreeseq.DegreeSequence;
@@ -18,20 +20,25 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
-
-public class Main {
+@SpringBootApplication
+public class Main implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     PerformanceTime performanceTime;
 
     public Main() {
-        performanceTime = new PerformanceTime();
+       /* performanceTime = new PerformanceTime();
         NetworkModel model = createNetwork();
         LOGGER.info(model.toString());
         LOGGER.info("Number of nodes = {} and edges =  {}", model.getGraph().getNodeCount(), model.getGraph().getEdgeCount());
@@ -39,7 +46,7 @@ public class Main {
         Map<String, StructuralDistanceDto> dtoMap = structuralDistance(model);
         performanceTime.avgTime();
         recreateNetwork(dtoMap, model);
-        model.getGraph().display();
+        model.getGraph().display();*/
     }
 
     private void iterateOverAllPairs(Graph g) {
@@ -95,8 +102,17 @@ public class Main {
 
 
     public static void main(String args[]) {
-       new Main();
+      // new Main();
+        SpringApplication.run(Main.class, args);
     }
 
 
+    @Autowired
+    StructDistanceService structDistanceService;
+
+
+    @Override
+    public void run(String... strings) throws Exception {
+        structDistanceService.prepareContext("biology.stackexchange.com");
+    }
 }
