@@ -14,8 +14,6 @@ public class StructDistance {
     BigInteger node1;
     @Column(name = "node2")
     BigInteger node2;
-    @Column(name = "distance")
-    Double distance;
     @ManyToOne
     @JoinColumn(name = "id_struct_analysis_context")
     StructAnalysisContext structAnalysisContext;
@@ -37,10 +35,6 @@ public class StructDistance {
 
     public BigInteger getNode2() {
         return node2;
-    }
-
-    public Double getDistance() {
-        return distance;
     }
 
     public StructAnalysisContext getStructAnalysisContext() {

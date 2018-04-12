@@ -33,7 +33,7 @@ public class StructDistanceService {
         List<BigInteger> nodeIdList = graphAnalysisContextRepository.findNodeIdList(latest.getId());
 
         if(nodeIdList != null && !nodeIdList.isEmpty()) {
-            StructAnalysisContext structAnalysisContext = new StructAnalysisContext(1L, latest, "Test using max distance 1 in biology.stackexchange.com");
+            StructAnalysisContext structAnalysisContext = new StructAnalysisContext(latest, "Structural distance test in " + communityName);
             structAnalysisContext = structAnalysisContextRepository.save(structAnalysisContext);
             LOGGER.info("Total of {} nodes to be analysed", nodeIdList.size());
 
@@ -45,20 +45,24 @@ public class StructDistanceService {
                     count++;
                     StructDistance structDistance = new StructDistance(nodeIdList.get(i), nodeIdList.get(j), structAnalysisContext);
                     structDistanceList.add(structDistance);
-                    saveStructDistanceList(structDistanceList, totalCombinations, count);
+                    if(structDistanceList.size() == 100000) {
+                        saveStructDistanceList(structDistanceList, totalCombinations, count);
+                    }
                 }
             }
+            if(!structDistanceList.isEmpty()) {
+                saveStructDistanceList(structDistanceList, totalCombinations, count);
+            }
         }
+        LOGGER.info("Finishing {}", communityName);
     }
 
     void saveStructDistanceList(List<StructDistance> structDistanceList, BigInteger totalCombinations, long count) {
-        if(structDistanceList.size() == 100000) {
             long startTime = System.currentTimeMillis();
             structDistanceRepository.save(structDistanceList);
             structDistanceList.clear();
             long totalTime = System.currentTimeMillis() - startTime;
             LOGGER.info("Saved {} StructDistance objects of {} - Takes {} s", count, totalCombinations, totalTime/1000);
-        }
     }
 
 

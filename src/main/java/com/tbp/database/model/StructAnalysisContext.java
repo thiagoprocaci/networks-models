@@ -10,26 +10,19 @@ public class StructAnalysisContext {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "struct_analysis_context_seq")
     @SequenceGenerator(name="struct_analysis_context_seq", sequenceName = "struct_analysis_context_seq", allocationSize = 1)
     Long id;
-    @Column(name = "max_distance")
-    Long maxDistance;
     @ManyToOne
     @JoinColumn(name = "id_graph_analysis_context")
     GraphAnalysisContext graphAnalysisContext;
     @Column(name = "description")
     String description;
 
-    public StructAnalysisContext(Long maxDistance, GraphAnalysisContext graphAnalysisContext, String description) {
-        this.maxDistance = maxDistance;
+    public StructAnalysisContext(GraphAnalysisContext graphAnalysisContext, String description) {
         this.graphAnalysisContext = graphAnalysisContext;
         this.description = description;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public Long getMaxDistance() {
-        return maxDistance;
     }
 
     public GraphAnalysisContext getGraphAnalysisContext() {
