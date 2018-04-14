@@ -4,9 +4,11 @@ package com.tbp.network.performance;
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class PerformanceTime {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PerformanceTime.class);

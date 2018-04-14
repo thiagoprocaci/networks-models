@@ -2,6 +2,7 @@ package com.tbp.network.structure.dtw;
 
 
 import com.tbp.network.structure.dtw.distance.DistanceFunction;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * Dynamic time warping implementation.
  * Details at: https://en.wikipedia.org/wiki/Dynamic_time_warping
  */
+@Component
 public class TraditionalDTW implements DTW {
 
     DistanceFunction distanceFunction;

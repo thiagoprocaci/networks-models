@@ -3,12 +3,14 @@ package com.tbp.network.structure.degreeseq;
 
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class DegreeSequence {
 
-    public static final String VISITED = "visited";
+
     public static final String LEVEL = "LEVEL";
 
 

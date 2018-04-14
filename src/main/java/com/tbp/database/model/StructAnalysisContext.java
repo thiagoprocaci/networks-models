@@ -21,6 +21,9 @@ public class StructAnalysisContext {
         this.description = description;
     }
 
+    public StructAnalysisContext() {
+    }
+
     public Long getId() {
         return id;
     }

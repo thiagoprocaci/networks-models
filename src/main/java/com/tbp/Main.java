@@ -1,9 +1,7 @@
 package com.tbp;
 
 
-import com.tbp.database.model.GraphAnalysisContext;
-import com.tbp.database.repository.GraphAnalysisContextRepository;
-import com.tbp.database.service.StructDistanceService;
+import com.tbp.database.facade.StructDistanceFacade;
 import com.tbp.network.model.BarabasiModel;
 import com.tbp.network.model.NetworkModel;
 import com.tbp.network.model.RegenerateModel;
@@ -106,13 +104,11 @@ public class Main implements CommandLineRunner {
         SpringApplication.run(Main.class, args);
     }
 
-
     @Autowired
-    StructDistanceService structDistanceService;
-
+    StructDistanceFacade structDistanceFacade;
 
     @Override
     public void run(String... strings) throws Exception {
-        structDistanceService.prepareContext("biology.stackexchange.com");
+        structDistanceFacade.structuralDistanceOne();
     }
 }
