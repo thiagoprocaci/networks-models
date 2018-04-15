@@ -33,12 +33,11 @@ public class DegreeSequence {
         while(!queue.isEmpty()) {
             Node node = queue.remove();
             Integer currentLevel = node.getAttribute(LEVEL, Integer.class);
-
-                if(map.get(currentLevel) == null) {
-                    map.put(currentLevel, new ArrayList<Integer>());
-                }
-                map.get(currentLevel).add(node.getDegree());
-                Node child;
+            if(map.get(currentLevel) == null) {
+                map.put(currentLevel, new ArrayList<Integer>());
+            }
+            map.get(currentLevel).add(node.getDegree());
+            Node child;
             if(maxLevelCondition(maxLevel, currentLevel + 1)) {
                 while((child = getUnvisitedChildNode(node, visitedNodeMap)) != null) {
                     visitedNodeMap.put(child.getId(), true);
