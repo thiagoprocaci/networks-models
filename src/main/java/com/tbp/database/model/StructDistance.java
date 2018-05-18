@@ -18,11 +18,11 @@ public class StructDistance {
     @JoinColumn(name = "id_struct_analysis_context")
     StructAnalysisContext structAnalysisContext;
 
-    @Column(name = "distance_0")
+    @Column(name = "distance_custom_dtw_0")
     Double distance0;
-    @Column(name = "distance_1")
+    @Column(name = "distance_custom_dtw_1", updatable = false)
     Double distance1;
-    @Column(name = "distance_2")
+    @Column(name = "distance_custom_dtw_2")
     Double distance2;
 
     public StructDistance(BigInteger node1, BigInteger node2, StructAnalysisContext structAnalysisContext) {

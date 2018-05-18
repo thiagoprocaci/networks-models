@@ -24,7 +24,7 @@ import java.util.List;
 public class StructDistanceService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StructDistanceService.class);
-    private static final String UPDATE_DISTANCE_1 = "update struct_distance set distance_1 = %s where id = %s";
+    private static final String UPDATE_DISTANCE_1 = "update struct_distance set distance_custom_dtw_1 = %s where id = %s";
 
 
     @Autowired

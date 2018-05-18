@@ -20,4 +20,6 @@ public interface StructDistanceRepository extends CrudRepository<StructDistance,
     @Query(value = "select * from struct_distance  where id_struct_analysis_context = :idStructContext and distance_2 is null limit 10000", nativeQuery = true)
     List<StructDistance> findWithDistance2Null(@Param("idStructContext") Long idStructContext);
 
+
+
 }

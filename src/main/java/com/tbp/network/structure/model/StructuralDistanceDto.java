@@ -1,6 +1,8 @@
 package com.tbp.network.structure.model;
 
 
+import com.tbp.network.mst.support.ComparableEdge;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +10,7 @@ import java.util.List;
 /**
  * Dto that stores the structural distance between two nodes
  */
-public class StructuralDistanceDto implements Comparable<StructuralDistanceDto> {
+public class StructuralDistanceDto implements ComparableEdge<StructuralDistanceDto> {
 
     String id; // id of the dto
     String node1;
@@ -43,6 +45,21 @@ public class StructuralDistanceDto implements Comparable<StructuralDistanceDto> 
 
     public String getNode2() {
         return node2;
+    }
+
+    @Override
+    public Integer getNode() {
+        return Integer.parseInt(node1);
+    }
+
+    @Override
+    public Integer getOtherNode() {
+        return Integer.parseInt(node2);
+    }
+
+    @Override
+    public double getDistance() {
+        return getStructDistance();
     }
 
     public Double getStructDistance() {
