@@ -4873,6 +4873,7 @@ CREATE MATERIALIZED VIEW biology_struct_distance_custom_dtw_1 AS
            FROM struct_analysis_context sac
           WHERE (sac.id_graph_analysis_context IN ( SELECT last_graph_analysis_context.id
                    FROM last_graph_analysis_context('biology.stackexchange.com'::text) last_graph_analysis_context(id, avg_clustering_coef, avg_degree, avg_dist, density, diameter, edges, id_community, modularity, modularity_with_resolution, nodes, number_communities, period, radius, strongly_component_count, weakly_component_count)))))
+  ORDER BY s.distance_custom_dtw_1
   WITH NO DATA;
 
 
@@ -5387,6 +5388,70 @@ CREATE SEQUENCE graph_node_seq
 ALTER TABLE graph_node_seq OWNER TO postgres;
 
 --
+-- Name: minimum_spanning_tree; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE minimum_spanning_tree (
+    id bigint NOT NULL,
+    id_community integer NOT NULL,
+    id_struct_analysis_context bigint NOT NULL,
+    id_graph_analysis_context bigint NOT NULL,
+    nodes integer NOT NULL,
+    edges integer NOT NULL
+);
+
+
+ALTER TABLE minimum_spanning_tree OWNER TO postgres;
+
+--
+-- Name: minimum_spanning_tree_edge; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE minimum_spanning_tree_edge (
+    id bigint NOT NULL,
+    id_graph_node_source bigint NOT NULL,
+    id_graph_node_dest bigint NOT NULL,
+    id_user_source bigint NOT NULL,
+    id_user_dest bigint NOT NULL,
+    id_community integer NOT NULL,
+    id_struct_analysis_context bigint NOT NULL,
+    id_graph_analysis_context bigint NOT NULL,
+    weight double precision NOT NULL,
+    id_minimum_spanning_tree bigint NOT NULL
+);
+
+
+ALTER TABLE minimum_spanning_tree_edge OWNER TO postgres;
+
+--
+-- Name: minimum_spanning_tree_edge_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE minimum_spanning_tree_edge_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE minimum_spanning_tree_edge_seq OWNER TO postgres;
+
+--
+-- Name: minimum_spanning_tree_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE minimum_spanning_tree_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE minimum_spanning_tree_seq OWNER TO postgres;
+
+--
 -- Name: post; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -5681,6 +5746,14 @@ ALTER TABLE ONLY graph_node
 
 
 --
+-- Name: minimum_spanning_tree__pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree
+    ADD CONSTRAINT minimum_spanning_tree__pk PRIMARY KEY (id);
+
+
+--
 -- Name: post_hist_id_post_hist_comm_id_community; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5969,6 +6042,94 @@ ALTER TABLE ONLY vote
 
 
 --
+-- Name: minimum_spanning_tree__comm_user_2_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree_edge
+    ADD CONSTRAINT minimum_spanning_tree__comm_user_2_fk FOREIGN KEY (id_user_dest) REFERENCES comm_user(id);
+
+
+--
+-- Name: minimum_spanning_tree__comm_user_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree_edge
+    ADD CONSTRAINT minimum_spanning_tree__comm_user_fk FOREIGN KEY (id_user_source) REFERENCES comm_user(id);
+
+
+--
+-- Name: minimum_spanning_tree__community_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree_edge
+    ADD CONSTRAINT minimum_spanning_tree__community_fk FOREIGN KEY (id_community) REFERENCES community(id);
+
+
+--
+-- Name: minimum_spanning_tree__graph_analysis_context_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree_edge
+    ADD CONSTRAINT minimum_spanning_tree__graph_analysis_context_fk FOREIGN KEY (id_graph_analysis_context) REFERENCES graph_analysis_context(id);
+
+
+--
+-- Name: minimum_spanning_tree__graph_node_2_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree_edge
+    ADD CONSTRAINT minimum_spanning_tree__graph_node_2_fk FOREIGN KEY (id_graph_node_dest) REFERENCES graph_node(id);
+
+
+--
+-- Name: minimum_spanning_tree__graph_node_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree_edge
+    ADD CONSTRAINT minimum_spanning_tree__graph_node_fk FOREIGN KEY (id_graph_node_source) REFERENCES graph_node(id);
+
+
+--
+-- Name: minimum_spanning_tree__struct_analysis_context_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree_edge
+    ADD CONSTRAINT minimum_spanning_tree__struct_analysis_context_fk FOREIGN KEY (id_struct_analysis_context) REFERENCES struct_analysis_context(id);
+
+
+--
+-- Name: minimum_spanning_tree_edge_minimum_spanning_tree__fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree_edge
+    ADD CONSTRAINT minimum_spanning_tree_edge_minimum_spanning_tree__fk FOREIGN KEY (id_minimum_spanning_tree) REFERENCES minimum_spanning_tree(id);
+
+
+--
+-- Name: mst__community_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree
+    ADD CONSTRAINT mst__community_fk FOREIGN KEY (id_community) REFERENCES community(id);
+
+
+--
+-- Name: mst__graph_analysis_context_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree
+    ADD CONSTRAINT mst__graph_analysis_context_fk FOREIGN KEY (id_graph_analysis_context) REFERENCES graph_analysis_context(id);
+
+
+--
+-- Name: mst__struct_analysis_context_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY minimum_spanning_tree
+    ADD CONSTRAINT mst__struct_analysis_context_fk FOREIGN KEY (id_struct_analysis_context) REFERENCES struct_analysis_context(id);
+
+
+--
 -- Name: struct_analysis_context_graph_analysis_context_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -5997,4 +6158,3 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 -- PostgreSQL database dump complete
 --
-

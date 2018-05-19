@@ -1,9 +1,6 @@
 package com.tbp.database.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigInteger;
 
 @Entity
@@ -11,15 +8,22 @@ import java.math.BigInteger;
 public class GraphNode {
 
     @Id
-    BigInteger id;
+    Long id;
     @Column(name = "degree")
     Integer degree;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_user")
+    User user;
 
-    public BigInteger getId() {
+    public Long getId() {
         return id;
     }
 
     public Integer getDegree() {
         return degree;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

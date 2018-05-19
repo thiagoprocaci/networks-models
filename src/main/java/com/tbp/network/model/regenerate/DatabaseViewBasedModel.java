@@ -7,18 +7,16 @@ import com.tbp.network.mst.KruskalQuickFind;
 import com.tbp.network.mst.support.ComparableEdge;
 
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
-import org.graphstream.graph.EdgeRejectedException;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.IdAlreadyInUseException;
-import org.graphstream.graph.Node;
+import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.SingleGraph;
 
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
 
-public class DatabaseViewBasedModel extends RegenerateModel {
+public class DatabaseViewBasedModel extends RegenerateModel implements Serializable {
 
     public DatabaseViewBasedModel(List<? extends ViewStructDistance> list, int nodeCount) {
         this.graph = generate(list, nodeCount);
@@ -45,7 +43,8 @@ public class DatabaseViewBasedModel extends RegenerateModel {
                 newNode.addAttribute(PREVIOUS_DEGREE, next.getDegreeNode2());
             }
             try {
-                g.addEdge(next.getNode1() + "_" + next.getNode2(), next.getNode1().toString(), next.getNode2().toString());
+                Edge edge = g.addEdge(next.getNode1() + "_" + next.getNode2(), next.getNode1().toString(), next.getNode2().toString());
+                edge.addAttribute("weight", next.getDistance());
             } catch (IdAlreadyInUseException | EdgeRejectedException e) {
                 // LOGGER.warn(e.getMessage());
             }

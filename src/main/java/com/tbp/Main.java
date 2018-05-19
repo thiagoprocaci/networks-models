@@ -2,10 +2,12 @@ package com.tbp;
 
 import com.tbp.execution.MSTGeneratorExecution;
 import com.tbp.execution.RandomGenerationExecution;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 @SpringBootApplication
 public class Main implements CommandLineRunner {
@@ -18,6 +20,7 @@ public class Main implements CommandLineRunner {
 
 
     public static void main(String args[]) {
+
         //RandomGenerationExecution randomGenerationExecution = new RandomGenerationExecution();
         //randomGenerationExecution.execute();
         SpringApplication.run(Main.class, args);

@@ -23,7 +23,7 @@ public class BiologyStructDistanceCustomDtw1 implements ViewStructDistance<Biolo
     @Column(name = "node1_alternative_id")
     Integer node1AlternativeId;
     @Column(name = "node2_alternative_id")
-    Integer node2AlternativaId;
+    Integer node2AlternativeId;
 
     public BigInteger getId() {
         return id;
@@ -31,12 +31,12 @@ public class BiologyStructDistanceCustomDtw1 implements ViewStructDistance<Biolo
 
     @Override
     public Integer getNode() {
-        return node1AlternativeId;
+        return node1AlternativeId - 1;
     }
 
     @Override
     public Integer getOtherNode() {
-        return node2AlternativaId;
+        return node2AlternativeId - 1;
     }
 
     @Override
